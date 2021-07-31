@@ -1,0 +1,5 @@
+const REGISTER = "REGISTER";
+const SIGNOUT = "SIGNOUT";
+const SIGNIN = "SIGNIN";
+
+export { REGISTER, SIGNOUT , SIGNIN };
