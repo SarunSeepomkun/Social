@@ -31,3 +31,7 @@ pre {
   color: #fff;
   padding: 10px;
 }
+
+textarea{
+  overflow: hidden;
+}

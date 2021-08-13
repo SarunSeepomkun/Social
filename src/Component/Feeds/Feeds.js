@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GetPosts } from "../../API/PostAPI";
 import Feed from "./Feed/Feed";
+import { default as Loading } from "../Skeletons/Feeds/Feeds";
 
 const Feeds = () => {
   const [posts, setPosts] = useState();
@@ -13,29 +14,26 @@ const Feeds = () => {
     fetchPost();
   }, []);
 
-  const Loading = () => {
-    return (
-      <button className="btn btn-outline-primary" type="button" disabled>
-        <span
-          className="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Loading...
-      </button>
-    );
-  };
-
   return (
-    <div>
+    <div className="container-fluid d-flex flex-column justify-content-center ">
       {posts !== undefined ? (
         posts.map((data, index) => (
-          <div className="d-flex justify-content-center mt-3">
+          <div className="mt-3" key={index}>
             <Feed data={data} key={index} />
           </div>
         ))
       ) : (
-        <Loading className="justify-content-center" />
+        <div className="container-fluid">
+          <div className="mt-3">
+            <Loading />
+          </div>
+          <div className="mt-3">
+            <Loading />
+          </div>
+          <div className="mt-3">
+            <Loading />
+          </div>
+        </div>
       )}
     </div>
   );

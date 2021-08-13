@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { SignIn } from "../../API/AuthAPI";
 import { AuthContext } from "../../Context/AuthContext";
 import * as AuthAction from "../../ActionType/AuthAction";
+import { Link } from "react-router-dom";
 
 const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
   const [loading, SetLoading] = useState(false);
@@ -25,7 +26,6 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
         dispatch({ type: AuthAction.SIGNIN, payload: data });
 
         history.push("/home");
-        ModalSignIn(false);
         SetLoading(false);
       }
     } catch (error) {
@@ -49,12 +49,14 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
 
   return (
     <form autoComplete="off" onSubmit={HandleSignIn}>
-      <div className="container-fluid p-1 m-1">
+      <div className="container card my-5">
         <div className="row p-1 m-1">
-          <label htmlFor="txtUsername" className="col-auto col-form-label">
-            Username
-          </label>
-          <div className="col-auto">
+          <div className="col-sm-6">
+            <label htmlFor="txtUsername" className="form-label">
+              Username
+            </label>
+          </div>
+          <div className="col-sm-6">
             <input
               type="text"
               className="form-control form-control-sm"
@@ -64,10 +66,12 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
           </div>
         </div>
         <div className="row p-1 m-1">
-          <label htmlFor="txtPassword" className="col-auto col-form-label">
-            Password
-          </label>
-          <div className="col-auto">
+          <div className="col-sm-6">
+            <label htmlFor="txtPassword" className="form-label">
+              Password
+            </label>
+          </div>
+          <div className="col-sm-6">
             <input
               type="password"
               className="form-control form-control-sm"
@@ -77,8 +81,8 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
           </div>
         </div>
         <div className="row p-1 m-1">
-          <div className="col-auto"></div>
-          <div className="col-auto">
+          <div className="col-sm-6"></div>
+          <div className="col-sm-6">
             {loading === true ? (
               <LoadingButton />
             ) : (
@@ -86,13 +90,13 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
                 Login
               </button>
             )}
-            <button
-              type="button"
-              className="btn btn-sm btn-link"
-              onClick={() => SetLoginOrRegister("REGISTER")}
-            >
-              Don't have an account ?
-            </button>
+            {loading === true ? (
+              ""
+            ) : (
+              <Link className="btn btn-sm btn-link" to={`/signup`}>
+                Don't have an account ?
+              </Link>
+            )}
           </div>
         </div>
       </div>

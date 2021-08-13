@@ -1,13 +1,16 @@
 import React, { useContext } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { AuthContext } from "./Context/AuthContext";
 import Navbar from "./Component/Navbar/Navbar";
 import Postbar from "./Component/Postbar/Postbar";
 import Feeds from "./Component/Feeds/Feeds";
 import Profile from "./Component/Profile/Profile";
+import Login from "./Component/Login/Login";
+import Register from "./Component/Register/Register";
 import NotFound from "./Component/NotFound/NotFound";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -37,6 +40,12 @@ function App() {
           </Router>
           <Route path="/home">
             <HomePage />
+          </Route>
+          <Route path="/signin">
+            <Login />
+          </Route>
+          <Route path="/signup">
+            <Register />
           </Route>
           <Route path="/profile/:userid">
             <Profile />

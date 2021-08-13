@@ -1,30 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import "bootstrap/js/dist/modal";
-import Login from "../Login/Login";
-import Register from "../Register/Register";
-import { Dialog, DialogTitle, Container } from "@material-ui/core";
 import { AuthContext } from "../../Context/AuthContext";
 import * as AuthAction from "../../ActionType/AuthAction";
+import brand_logo from "../../Assets/Images/social-media-128.png";
 
 const Navbar = () => {
   const { user, dispatch } = useContext(AuthContext);
-  const [LoginOrRegister, SetLoginOrRegister] = useState("LOGIN");
-  const [ShowSignIn, SetShowSignIn] = useState(false);
   let history = useHistory();
-
-  const handleClose = () => {
-    SetShowSignIn(false);
-  };
 
   const SignOutHandle = () => {
     try {
       dispatch({ type: AuthAction.SIGNOUT, payload: user });
 
-      localStorage.removeItem("user");
       history.push("/home");
-
-      console.log(user);
     } catch (error) {
       console.log(`Error: Header.SignOutHandle(),${error}`);
     }
@@ -34,6 +23,11 @@ const Navbar = () => {
     <section>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
+          <img
+            src={brand_logo}
+            alt="brand-logo"
+            style={{ height: "30px", width: "30px" }}
+          />
           <label htmlFor="txtUsername" className="navbar-brand">
             Social
           </label>
@@ -66,9 +60,9 @@ const Navbar = () => {
               </li>
             </ul>
             {user === null ? (
-              <button className="btn" onClick={() => SetShowSignIn(true)}>
+              <Link className="btn" to={`/signin`}>
                 Sign-In
-              </button>
+              </Link>
             ) : (
               ""
             )}
@@ -82,29 +76,6 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-      {/* <!-- SignIn Modal --> */}
-      <Dialog
-        aria-labelledby="customized-dialog-title"
-        open={ShowSignIn}
-        onClose={handleClose}
-      >
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          {LoginOrRegister === "LOGIN" ? "Sign-In" : "Sign-Up"}
-        </DialogTitle>
-        <Container>
-          {LoginOrRegister === "LOGIN" ? (
-            <Login
-              SetLoginOrRegister={SetLoginOrRegister}
-              ModalSignIn={SetShowSignIn}
-            />
-          ) : (
-            <Register
-              SetLoginOrRegister={SetLoginOrRegister}
-              ModalSignIn={SetShowSignIn}
-            />
-          )}
-        </Container>
-      </Dialog>
     </section>
   );
 };

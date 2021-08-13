@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, createRef } from "react";
 import { GetProfile } from "../../API/UserAPI";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
+import { default as Loading } from "../Skeletons/Feeds/Feeds";
 
 const Profile = () => {
   const userID_Param = useParams().userid;
@@ -20,39 +21,20 @@ const Profile = () => {
     fectUserProfile();
   }, [userID_Param]);
 
-  const Loading = () => {
-    return (
-      <button className="btn btn-outline-primary" type="button" disabled>
-        <span
-          className="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Loading...
-      </button>
-    );
-  };
-
   return (
     <>
-      {Profile === null ||
-      Profile === {} ||
-      Profile === "" ||
-      Profile === undefined ? (
-        <Loading />
-      ) : (
+      {Profile ? (
         <div className="container p-1 m-1">
           <div className="row p-1 m-1">
             <label htmlFor="txtUsername" className="col-sm-2 col-form-label">
               Username
             </label>
             <div className="col-sm-10">
-              {user.userID === Profile.userID ? (
+              {user.userID === Profile.userID && user ? (
                 <input
                   type="text"
                   className="form-control"
                   id="txtUsername"
-                  placeholder="required"
                   required
                   value={Profile.username}
                 />
@@ -70,7 +52,6 @@ const Profile = () => {
                 type="password"
                 className="form-control"
                 id="txtPassword"
-                placeholder="required"
                 required
               />
             </div>
@@ -116,7 +97,6 @@ const Profile = () => {
                   type="email"
                   className="form-control"
                   id="txtEmail"
-                  placeholder="not required"
                   value={Profile.email}
                 />
               ) : (
@@ -129,12 +109,7 @@ const Profile = () => {
               Address
             </label>
             <div className="col-sm-10">
-              <input
-                type="text"
-                className="form-control"
-                id="txtAddress"
-                placeholder="not required"
-              />
+              <input type="text" className="form-control" id="txtAddress" />
             </div>
           </div>
           <div className="row p-1 m-1">
@@ -142,12 +117,11 @@ const Profile = () => {
               Your Bio
             </label>
             <div className="col-sm-10">
-              {user.userID === Profile.userID ? (
+              {user.userID === Profile.userID && user.userID !== null ? (
                 <input
                   type="textarea"
                   className="form-control"
                   id="txtBio"
-                  placeholder="not required"
                   value={Profile.bio}
                   ref={BioRef}
                 />
@@ -158,7 +132,7 @@ const Profile = () => {
           </div>
           <div className="row p-1 m-1">
             <div className="col-xs-12">
-              {user.userID === userID_Param ? (
+              {user.userID === Profile.userID ? (
                 <button type="submit" className="btn btn-primary">
                   Save
                 </button>
@@ -168,6 +142,8 @@ const Profile = () => {
             </div>
           </div>
         </div>
+      ) : (
+        <Loading />
       )}
     </>
   );
