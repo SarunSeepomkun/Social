@@ -24,15 +24,16 @@ const EditProfile = ({ userID, bio, country, token }) => {
   }
 };
 
-const FolowUser = ({ userID, followuserID, token }) => {
+const FollowUser = async ({ userID, followuserID, token }) => {
   try {
-    return axios.put(
+    const result = await axios.put(
       `${API_URI}/user/followuser`,
       { userID, followuserID },
       {
         headers: { jwttoken: token },
       }
     );
+    return result;
   } catch (error) {
     console.log(`Error: API/UserAPI/FolowUser , ${error}`);
   }
@@ -52,4 +53,4 @@ const CloseAccount = ({ userID, token }) => {
   }
 };
 
-export { GetProfile, EditProfile, FolowUser, CloseAccount };
+export { GetProfile, EditProfile, FollowUser, CloseAccount };

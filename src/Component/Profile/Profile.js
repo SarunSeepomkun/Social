@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext, createRef } from "react";
-import { GetProfile, EditProfile } from "../../API/UserAPI";
+import { format, parseISO } from "date-fns";
+import { GetProfile, EditProfile, FollowUser } from "../../API/UserAPI";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import { default as Loading } from "../Skeletons/Feeds/Feeds";
@@ -7,29 +8,96 @@ import { Avatar } from "@material-ui/core";
 
 const Profile = () => {
   const userID_Param = useParams().userid;
-  const [Profile, SetProfile] = useState({});
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+
+  const [txtUsername, setTxtUsername] = useState("");
+
+  const [txtEmail, setTxtEmail] = useState("");
+
   const BioRef = createRef();
+  const [txtBio, setTxtBio] = useState("");
+
+  const [lblFollower, setlblFollower] = useState("");
+  const [lblFollowing, setlblFollowing] = useState("");
+
+  const [lblCreatedDate, setLblCreatedDate] = useState("");
+
+  const [btnFollowText, setBtnFollowText] = useState("Follow");
+  const [selfProfile, setSelfProfile] = useState(false);
+
+  function SetProfile(data) {
+    setTxtUsername(data.username);
+    setTxtEmail(data.email);
+    setLblCreatedDate(data.createdDate);
+    setTxtBio(data.bio);
+    setlblFollower(data.followers.length);
+    setlblFollowing(data.followings.length);
+  }
 
   useEffect(() => {
-    const fectUserProfile = async () => {
+    const fetchUserProfile = async () => {
+      //By Parameter
       if (userID_Param) {
         const { data } = await GetProfile(userID_Param);
         SetProfile(data);
       }
     };
-
-    fectUserProfile();
+    fetchUserProfile();
   }, [userID_Param]);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      //By User logon
+      if (user != null) {
+        if (user.userID === userID_Param) {
+          setSelfProfile(true);
+        } else {
+          setSelfProfile(false);
+          const { data } = await GetProfile(user.userID);
+          if (data.followings.includes(userID_Param)) {
+            setBtnFollowText("Followed");
+          } else {
+            setBtnFollowText("Follow");
+          }
+        }
+      }
+    };
+    fetchUserProfile();
+  }, [user, userID_Param]);
 
   const SaveProfile = async () => {
     try {
       setLoading(true);
-      const data = { token: user.token , userID:'', bio:'', country:'' };
+      const data = {
+        token: user.token,
+        userID: user.userID,
+        bio: BioRef.current.value,
+        country: "",
+      };
       const result = await EditProfile(data);
       if (result) {
       } else {
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const FollowHandle = async () => {
+    try {
+      setLoading(true);
+      const data = {
+        token: user.token,
+        userID: user.userID,
+        followuserID: userID_Param,
+      };
+      const result = await FollowUser(data);
+      if (result.data.message.toLowerCase() === "followed") {
+        setBtnFollowText("Followed");
+      } else if (result.data.message.toLowerCase() === "unfollowed") {
+        setBtnFollowText("Follow");
       }
     } catch (error) {
     } finally {
@@ -54,13 +122,48 @@ const Profile = () => {
     <div className="d-flex justify-content-center mt-5">
       {Profile ? (
         <div className="container card p-1 m-1">
+          <div className="row">
+            <div className="col-12">
+              <div className="d-flex justify-content-end">
+                {selfProfile === true ? (
+                  ""
+                ) : (
+                  <>
+                    {loading === true ? (
+                      <LoadingButton />
+                    ) : (
+                      <button
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => FollowHandle()}
+                      >
+                        {btnFollowText}
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
           <div className="row p-1 m-1">
             <div className="col-12">
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <button className="btn btn-link">
                   <Avatar alt="avatar" src="" />
                 </button>
-                <label>Follower 0 Following 0</label>
+                <div className="form-group">
+                  <label className="form-label mx-1">Joined</label>
+                  <label className="form-label mx-1">
+                    {lblCreatedDate === ""
+                      ? ""
+                      : format(parseISO(lblCreatedDate), "dd MMMM yyyy")}
+                  </label>
+                </div>
+                <div className="form-group d-flex">
+                  <label className="form-label mx-1">Follower</label>
+                  <label className="form-label mx-1">{lblFollower}</label>
+                  <label className="form-label mx-1">Following</label>
+                  <label className="form-label mx-1">{lblFollowing}</label>
+                </div>
               </div>
             </div>
           </div>
@@ -71,21 +174,22 @@ const Profile = () => {
               </label>
             </div>
             <div className="col-sm-10">
-              {user.userID === Profile.userID && user ? (
+              {selfProfile === true ? (
                 <input
                   type="text"
                   className="form-control"
                   id="txtUsername"
                   required
-                  value={Profile.username}
+                  value={txtUsername}
+                  onChange={(e) => setTxtUsername(e.target.value)}
                 />
               ) : (
-                <label>{Profile.username}</label>
+                <label>{txtUsername}</label>
               )}
             </div>
           </div>
 
-          {user.userID === userID_Param ? (
+          {selfProfile === true ? (
             <div className="row p-1 m-1">
               <div className="col-sm-2">
                 <label htmlFor="txtPassword" className="form-label">
@@ -112,7 +216,7 @@ const Profile = () => {
               </label>
             </div>
             <div className="col-sm-10 col-form-check">
-              {user.userID === userID_Param ? (
+              {selfProfile === true ? (
                 <div>
                   <input
                     id="radMale"
@@ -148,24 +252,25 @@ const Profile = () => {
               Email
             </label>
             <div className="col-sm-10">
-              {user.userID === userID_Param ? (
+              {selfProfile === true ? (
                 <input
                   type="email"
                   className="form-control"
                   id="txtEmail"
-                  value={Profile.email}
+                  value={txtEmail}
+                  onChange={(e) => setTxtEmail(e.target.value)}
                 />
               ) : (
-                <label>{Profile.email}</label>
+                <label>{txtEmail}</label>
               )}
             </div>
           </div>
           <div className="row p-1 m-1">
             <label htmlFor="txtAddress" className="col-sm-2 col-form-label">
-              Address
+              Location
             </label>
             <div className="col-sm-10">
-              {user.userID === userID_Param ? (
+              {selfProfile === true ? (
                 <input type="text" className="form-control" id="txtAddress" />
               ) : (
                 ""
@@ -177,30 +282,37 @@ const Profile = () => {
               Your Bio
             </label>
             <div className="col-sm-10">
-              {user.userID === userID_Param && user.userID !== null ? (
+              {selfProfile === true ? (
                 <input
                   type="textarea"
                   className="form-control"
                   id="txtBio"
-                  value={Profile.bio}
+                  value={txtBio}
+                  onChange={(e) => setTxtBio(e.target.value)}
                   ref={BioRef}
                 />
               ) : (
-                <label>{Profile.bio}</label>
+                <label>{txtBio}</label>
               )}
             </div>
           </div>
           <div className="row p-1 m-1">
             <div className="col-xs-12">
               <div className="d-flex justify-content-center">
-                {user.userID === userID_Param ? (
-                  <button
-                    type="submit"
-                    className="btn btn-outline-primary"
-                    onClick={() => SaveProfile()}
-                  >
-                    Save
-                  </button>
+                {selfProfile === true ? (
+                  <>
+                    {loading === true ? (
+                      <LoadingButton />
+                    ) : (
+                      <button
+                        type="submit"
+                        className="btn btn-outline-primary"
+                        onClick={() => SaveProfile()}
+                      >
+                        Save
+                      </button>
+                    )}
+                  </>
                 ) : (
                   ""
                 )}

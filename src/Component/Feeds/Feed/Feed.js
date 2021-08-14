@@ -16,8 +16,8 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,7 +50,7 @@ const Feed = ({ data, key }) => {
   const [textlength, setTextlength] = useState(0);
   const [edit, setEdit] = useState(false);
 
-  const [openAlert,setOpenAlert] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
   const [errorText, setErrorText] = useState("");
 
   const [deletedPost, setDeletedPost] = useState(false);
@@ -126,8 +126,6 @@ const Feed = ({ data, key }) => {
     setEdit(false);
   };
 
-  const handleFollow = (data) => {};
-
   const handleDelete = async (data) => {
     try {
       data = {
@@ -150,12 +148,38 @@ const Feed = ({ data, key }) => {
     }
   };
 
-  function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  const handleFollow = (data) => {
+    try {
+      data = { userID: user.userID, postID: data._id, token: user.token };
+      const result = PostAPI.LikePost(data);
+
+      if (result) {
+      }
+    } catch (error) {
+      setErrorText(`Error : ${error}`);
+      setOpenAlert(true);
+    }
+  };
+
+  const handleLikePost = (data) => {
+    try {
+      data = { userID: user.userID, postID: data._id, token: user.token };
+      const result = PostAPI.LikePost(data);
+
+      if (result) {
+      }
+    } catch (error) {
+      setErrorText(`Error : ${error}`);
+      setOpenAlert(true);
+    }
+  };
+
+  function handleAlertClose() {
+    setOpenAlert(false);
   }
 
-  function handleAlertClose(){
-    setOpenAlert(false);
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
   return (
@@ -269,7 +293,7 @@ const Feed = ({ data, key }) => {
             </CardContent>
             {likeAble === true ? (
               <CardActions disableSpacing>
-                <IconButton aria-label="like">
+                <IconButton aria-label="like" onClick={() => handleLikePost()}>
                   <FavoriteIcon />
                 </IconButton>
               </CardActions>
@@ -281,7 +305,7 @@ const Feed = ({ data, key }) => {
                 open={openAlert}
                 autoHideDuration={6000}
                 onClose={handleAlertClose}
-                anchorOrigin={{ vertical:"top", horizontal:"center" }}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
               >
                 <Alert onClose={handleAlertClose} severity="error">
                   {errorText}

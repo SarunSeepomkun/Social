@@ -33,9 +33,17 @@ const CreatePost = async ({ userID, message, token }) => {
   }
 };
 
-const LikePost = (data) => {
+const LikePost = async ({ userID, postID, token }) => {
   try {
-    return axios.put(`${API_URI}/post/likepost`, data);
+    const result = await axios.put(
+      `${API_URI}/post/likepost`,
+      { userID, postID },
+      {
+        headers: { jwttoken: token },
+      }
+    );
+
+    return result;
   } catch (error) {
     console.log(`PostAPI.LikePost,${error}`);
   }
@@ -50,7 +58,6 @@ const EditPost = async ({ userID, postID, message, token }) => {
         headers: { jwttoken: token },
       }
     );
-
     return result;
   } catch (error) {
     console.log(`PostAPI.EditPost,${error}`);
