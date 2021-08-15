@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import { default as Loading } from "../Skeletons/Feeds/Feeds";
 import { Avatar } from "@material-ui/core";
+import CountryDropdown from "../CountryDropdown/CountryDropdown";
 
 const Profile = () => {
   const userID_Param = useParams().userid;
@@ -23,12 +24,15 @@ const Profile = () => {
 
   const [lblCreatedDate, setLblCreatedDate] = useState("");
 
+  const [lblCountry,setLblCountry] = useState("");
+
   const [btnFollowText, setBtnFollowText] = useState("Follow");
   const [selfProfile, setSelfProfile] = useState(false);
 
   function SetProfile(data) {
     setTxtUsername(data.username);
     setTxtEmail(data.email);
+    setLblCountry(data.country);
     setLblCreatedDate(data.createdDate);
     setTxtBio(data.bio);
     setlblFollower(data.followers.length);
@@ -73,7 +77,7 @@ const Profile = () => {
         token: user.token,
         userID: user.userID,
         bio: BioRef.current.value,
-        country: "",
+        country: lblCountry,
       };
       const result = await EditProfile(data);
       if (result) {
@@ -270,11 +274,7 @@ const Profile = () => {
               Location
             </label>
             <div className="col-sm-10">
-              {selfProfile === true ? (
-                <input type="text" className="form-control" id="txtAddress" />
-              ) : (
-                ""
-              )}
+                <CountryDropdown country={lblCountry} setCountry={setLblCountry} selfProfile={selfProfile} />
             </div>
           </div>
           <div className="row p-1 m-1">

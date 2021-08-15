@@ -3,12 +3,12 @@
   "name": "iPeach Social network",
   "icons": [
     {
-      "src": "social-media-16.png",
-      "type": "image/png",
+      "src": "social-media-16.ico",
+      "type": "image/ico",
       "sizes": "16x16"
     },
     {
-      "src": "social-media-128.png",
+      "src": "social-media-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
