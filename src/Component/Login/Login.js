@@ -4,6 +4,10 @@ import { SignIn } from "../../API/AuthAPI";
 import { AuthContext } from "../../Context/AuthContext";
 import * as AuthAction from "../../ActionType/AuthAction";
 import { Link } from "react-router-dom";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
   const [loading, SetLoading] = useState(false);
@@ -11,26 +15,33 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
   const PasswordRef = createRef();
   let history = useHistory();
   const { dispatch } = useContext(AuthContext);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbar_Message, setSnackbar_Message] = useState("");
 
   async function HandleSignIn(e) {
     e.preventDefault();
     try {
       SetLoading(true);
-      const { data } = await SignIn({
+      const result = await SignIn({
         username: UsernameRef.current.value,
         password: PasswordRef.current.value,
       });
 
-      if (data != null && data !== "" && data !== undefined) {
-        //console.log(SignIn);
+      if (result != null && result !== "" && result !== undefined) {
+        const { data } = result;
         dispatch({ type: AuthAction.SIGNIN, payload: data });
 
         history.push("/home");
         SetLoading(false);
+      } else {
+        setSnackbar_Message("User doesn't exist or User/password mistake");
+        setOpenSnackbar(true);
       }
     } catch (error) {
+      setSnackbar_Message(`${error}`);
+      setOpenSnackbar(true);
+    } finally {
       SetLoading(false);
-      console.log(`Login.HandleSignIn , ${error}`);
     }
   }
 
@@ -45,6 +56,14 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
         Loading...
       </button>
     );
+  };
+
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  const Snackbar_handleClose = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -100,6 +119,31 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
           </div>
         </div>
       </div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={Snackbar_handleClose}
+        action={
+          <React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={Snackbar_handleClose}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      >
+        <Alert onClose={Snackbar_handleClose} severity="error">
+          {snackbar_Message}
+        </Alert>
+      </Snackbar>
     </form>
   );
 };

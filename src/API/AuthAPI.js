@@ -4,7 +4,8 @@ const API_URI = process.env.REACT_APP_API_SOCIAL;
 
 const SignIn = async (data) => {
   try {
-    return await axios.post(`${API_URI}/user/signin`, data);
+    const result = await axios.post(`${API_URI}/user/signin`, data);
+    return result;
   } catch (error) {
     console.log(`authApi.SignIn,${error}`);
   }

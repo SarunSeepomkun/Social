@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Feed = ({ data, key }) => {
+const Feed = ({ data, index }) => {
   const { user } = useContext(AuthContext);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -107,14 +107,21 @@ const Feed = ({ data, key }) => {
         token: user.token,
       };
       const result = await PostAPI.EditPost(data);
-      if (result.message === "Updated") {
-        setEdit(false);
-        setTxtPost(data.message);
-        setErrorText("");
+
+      if (result) {
+        if (result.data.message === "Updated") {
+          setEdit(false);
+          setTxtPost(data.message);
+          setErrorText("");
+        } else {
+          setErrorText(result.data.message);
+          setOpenAlert(true);
+        }
       } else {
         setErrorText(result.message);
         setOpenAlert(true);
       }
+
       setAnchorEl(null);
     } catch (error) {
       setErrorText(`Error : ${error.message}`);
@@ -183,27 +190,27 @@ const Feed = ({ data, key }) => {
   }
 
   return (
-    <div className="container-fluid" key={key}>
+    <div className="container-fluid" key={index}>
       {deletedPost === false ? (
         <>
           <Card className={classes.root}>
             <CardHeader
               avatar={
-                <Avatar aria-label="avartar" className={classes.avatar}>
-                  <Link to={`/profile/${data.user_info[0]._id}`}>
+                <Link to={`/profile/${data.user_info[0]._id}`}>
+                  <Avatar aria-label="avartar" className={classes.avatar}>
                     {data.user_info[0].username.charAt(0).toUpperCase()}
-                  </Link>
-                </Avatar>
+                  </Avatar>
+                </Link>
               }
               action={
                 functionAble ? (
                   <IconButton
                     aria-controls="action-menu"
                     aria-haspopup="true"
-                    onClick={handleClick}
+                    onClick={(e) => handleClick(e)}
                     aria-label="settings"
                   >
-                    <MoreVertIcon onClick={handleClick} />
+                    <MoreVertIcon />
                   </IconButton>
                 ) : (
                   ""
@@ -211,7 +218,9 @@ const Feed = ({ data, key }) => {
               }
               title={
                 <Link to={`/profile/${data.user_info[0]._id}`}>
-                  {data.user_info[0].username}
+                  <label className="text-capitalize">
+                    {data.user_info[0].username}
+                  </label>
                 </Link>
               }
               subheader={format(
@@ -227,7 +236,7 @@ const Feed = ({ data, key }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
                 anchorOrigin={{
-                  vertical: "bittom",
+                  vertical: "bottom",
                   horizontal: "center",
                 }}
               >
@@ -303,11 +312,14 @@ const Feed = ({ data, key }) => {
             <div>
               <Snackbar
                 open={openAlert}
-                autoHideDuration={6000}
+                autoHideDuration={5000}
                 onClose={handleAlertClose}
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
               >
-                <Alert onClose={handleAlertClose} severity="error">
+                <Alert onClose={() => handleAlertClose()} severity="error">
                   {errorText}
                 </Alert>
               </Snackbar>

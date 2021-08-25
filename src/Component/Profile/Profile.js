@@ -126,8 +126,11 @@ const Profile = () => {
       const result = await FollowUser(data);
       if (result.data.message.toLowerCase() === "followed") {
         setBtnFollowText("Followed");
+        setlblFollower(lblFollower + 1);
       } else if (result.data.message.toLowerCase() === "unfollowed") {
         setBtnFollowText("Follow");
+        
+        setlblFollower(lblFollower - 1);
       }
     } catch (error) {
       setOpenSnackbar(true);
@@ -199,7 +202,7 @@ const Profile = () => {
                       <LoadingButton />
                     ) : (
                       <button
-                        className="btn btn-sm btn-outline-primary"
+                        className={btnFollowText === "Followed" ? "btn btn-sm btn-primary" : "btn btn-sm btn-outline-primary"}
                         onClick={() => FollowHandle()}
                       >
                         {btnFollowText}
@@ -312,7 +315,7 @@ const Profile = () => {
                   </label>
                 </div>
               ) : (
-                ""
+                gender
               )}
             </div>
           </div>

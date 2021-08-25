@@ -29,7 +29,7 @@ const Navbar = () => {
             style={{ height: "30px", width: "30px" }}
           />
           <label htmlFor="txtUsername" className="navbar-brand mx-1">
-            {user ? " Hello! " + user.username : " Social "}
+            <label className="text-capitalize">{user ? " Hello! " + user.username : " Social "}</label>
           </label>
           <button
             className="navbar-toggler"
@@ -61,7 +61,7 @@ const Navbar = () => {
             </ul>
             {user === null ? (
               <Link className="btn" to={`/signin`}>
-                Account
+                Sign in
               </Link>
             ) : (
               ""

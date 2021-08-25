@@ -4,7 +4,8 @@ const API_URI = process.env.REACT_APP_API_SOCIAL;
 
 const GetPosts = async () => {
   try {
-    return await axios.get(`${API_URI}/post/getposts`);
+    const result = await axios.get(`${API_URI}/post/getposts`);
+    return result;
   } catch (error) {
     console.log(`PostAPI.GetPosts,${error}`);
   }
@@ -61,18 +62,18 @@ const EditPost = async ({ userID, postID, message, token }) => {
     );
     return result;
   } catch (error) {
-    console.log(`PostAPI.EditPost,${error}`);
+    return error;
   }
 };
 
 const DeletePost = async ({ userID, postID, token }) => {
   try {
-    const result = await axios.delete(
+    const result = await axios.post(
       `${API_URI}/post/deletepost`,
-      { userID, postID },
       {
         headers: { jwttoken: token },
-      }
+      },
+      { userID, postID }
     );
     return result;
   } catch (error) {
