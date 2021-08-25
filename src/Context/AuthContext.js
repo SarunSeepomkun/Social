@@ -15,8 +15,11 @@ function AuthProvider({ children }) {
   useEffect(() => {
     if (state.user) {
       const decodeToken = jwtDecode(state.user.token);
+
       if (decodeToken.exp * 1000 < Date.now()) {
         localStorage.removeItem("user");
+      }else{
+        localStorage.setItem('user', JSON.stringify(state.user));
       }
     }
   }, [state.user]);

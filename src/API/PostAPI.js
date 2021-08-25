@@ -10,9 +10,10 @@ const GetPosts = async () => {
   }
 };
 
-const GetPostByUserID = (data) => {
+const GetPostByUserID = async (data) => {
   try {
-    return axios.get(`${API_URI}/post/getpostbyuserid`);
+    const data = await axios.get(`${API_URI}/post/getpostbyuserid`);
+    return data;
   } catch (error) {
     console.log(`PostAPI.GetPostByUserID,${error}`);
   }

@@ -1,11 +1,20 @@
 import React, { useEffect, useState, useContext, createRef } from "react";
 import { format, parseISO } from "date-fns";
-import { GetProfile, EditProfile, FollowUser } from "../../API/UserAPI";
+import {
+  GetProfile,
+  EditProfile,
+  FollowUser,
+  UploadAvatar,
+} from "../../API/UserAPI";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import { default as Loading } from "../Skeletons/Feeds/Feeds";
 import { Avatar } from "@material-ui/core";
 import CountryDropdown from "../CountryDropdown/CountryDropdown";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const Profile = () => {
   const userID_Param = useParams().userid;
@@ -19,15 +28,22 @@ const Profile = () => {
   const BioRef = createRef();
   const [txtBio, setTxtBio] = useState("");
 
+  const [gender, setGender] = useState("");
+
   const [lblFollower, setlblFollower] = useState("");
   const [lblFollowing, setlblFollowing] = useState("");
 
   const [lblCreatedDate, setLblCreatedDate] = useState("");
 
-  const [lblCountry,setLblCountry] = useState("");
+  const [lblCountry, setLblCountry] = useState("");
 
   const [btnFollowText, setBtnFollowText] = useState("Follow");
   const [selfProfile, setSelfProfile] = useState(false);
+
+  const [avatarFile, setAvatarFile] = useState("");
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbar_Message, setSnackbar_Message] = useState("");
 
   function SetProfile(data) {
     setTxtUsername(data.username);
@@ -37,6 +53,7 @@ const Profile = () => {
     setTxtBio(data.bio);
     setlblFollower(data.followers.length);
     setlblFollowing(data.followings.length);
+    setGender(data.gender);
   }
 
   useEffect(() => {
@@ -65,6 +82,8 @@ const Profile = () => {
             setBtnFollowText("Follow");
           }
         }
+      } else {
+        setSelfProfile(false);
       }
     };
     fetchUserProfile();
@@ -78,12 +97,19 @@ const Profile = () => {
         userID: user.userID,
         bio: BioRef.current.value,
         country: lblCountry,
+        gender: gender,
       };
       const result = await EditProfile(data);
       if (result) {
+        setOpenSnackbar(true);
+        setSnackbar_Message("Saved");
       } else {
+        setOpenSnackbar(true);
+        setSnackbar_Message("Cannot save");
       }
     } catch (error) {
+      setOpenSnackbar(true);
+      setSnackbar_Message(`${Error}`);
     } finally {
       setLoading(false);
     }
@@ -104,8 +130,36 @@ const Profile = () => {
         setBtnFollowText("Follow");
       }
     } catch (error) {
+      setOpenSnackbar(true);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const importFile = () => {
+    let input = document.createElement("input");
+    input.type = "file";
+    input.onchange = (_) => {
+      let files = Array.from(input.files);
+      setAvatarFile(files);
+      UploadHandle();
+    };
+    input.click();
+  };
+
+  const UploadHandle = async () => {
+    try {
+      const formData = new FormData();
+
+      const data = { files: formData, userID: user.userID, token: user.token };
+
+      formData.append("file", avatarFile);
+      const result = await UploadAvatar(data);
+
+      if (result) {
+      }
+    } catch (error) {
+      console.log(`Error: Profile.UploadHandle ${error}`);
     }
   };
 
@@ -122,6 +176,14 @@ const Profile = () => {
     );
   };
 
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  const Snackbar_handleClose = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
     <div className="d-flex justify-content-center mt-5">
       {Profile ? (
@@ -129,7 +191,7 @@ const Profile = () => {
           <div className="row">
             <div className="col-12">
               <div className="d-flex justify-content-end">
-                {selfProfile === true ? (
+                {selfProfile === true || user === null ? (
                   ""
                 ) : (
                   <>
@@ -151,7 +213,7 @@ const Profile = () => {
           <div className="row p-1 m-1">
             <div className="col-12">
               <div className="d-flex flex-column justify-content-center align-items-center">
-                <button className="btn btn-link">
+                <button onClick={() => importFile()}>
                   <Avatar alt="avatar" src="" />
                 </button>
                 <div className="form-group">
@@ -229,6 +291,8 @@ const Profile = () => {
                     value="male"
                     name="gender"
                     required
+                    onChange={() => setGender("male")}
+                    checked={gender === "male" ? true : false}
                   />
                   <label className="form-check-label mx-1" htmlFor="radMale">
                     Male
@@ -240,6 +304,8 @@ const Profile = () => {
                     value="female"
                     name="gender"
                     required
+                    onChange={() => setGender("female")}
+                    checked={gender === "female" ? true : false}
                   />
                   <label className="form-check-label mx-1" htmlFor="radFemale">
                     Female
@@ -274,7 +340,11 @@ const Profile = () => {
               Location
             </label>
             <div className="col-sm-10">
-                <CountryDropdown country={lblCountry} setCountry={setLblCountry} selfProfile={selfProfile} />
+              <CountryDropdown
+                country={lblCountry}
+                setCountry={setLblCountry}
+                selfProfile={selfProfile}
+              />
             </div>
           </div>
           <div className="row p-1 m-1">
@@ -323,6 +393,31 @@ const Profile = () => {
       ) : (
         <Loading />
       )}
+      <Snackbar
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={Snackbar_handleClose}
+        action={
+          <React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={Snackbar_handleClose}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      >
+        <Alert onClose={Snackbar_handleClose} severity="success">
+          {snackbar_Message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
