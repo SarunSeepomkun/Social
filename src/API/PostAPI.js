@@ -70,10 +70,10 @@ const DeletePost = async ({ userID, postID, token }) => {
   try {
     const result = await axios.post(
       `${API_URI}/post/deletepost`,
+      { userID, postID },
       {
         headers: { jwttoken: token },
-      },
-      { userID, postID }
+      }
     );
     return result;
   } catch (error) {

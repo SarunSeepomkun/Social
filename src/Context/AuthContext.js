@@ -13,15 +13,18 @@ function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   useEffect(() => {
-    if (state.user) {
-      const decodeToken = jwtDecode(state.user.token);
+    const interval = setInterval(() => {
+      if (state.user) {
+        const decodeToken = jwtDecode(state.user.token);
 
-      if (decodeToken.exp * 1000 < Date.now()) {
-        localStorage.removeItem("user");
-      }else{
-        localStorage.setItem('user', JSON.stringify(state.user));
+        if (decodeToken.exp * 1000 < Date.now()) {
+          localStorage.removeItem("user");
+        } else {
+          localStorage.setItem("user", JSON.stringify(state.user));
+        }
       }
-    }
+    }, 1000);
+    return () => clearInterval(interval);
   }, [state.user]);
 
   return (

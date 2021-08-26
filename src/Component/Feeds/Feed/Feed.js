@@ -3,16 +3,16 @@ import { format, parseISO } from "date-fns";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Context/AuthContext";
 import * as PostAPI from "../../../API/PostAPI";
+import LikeButton from "../../LikeButton/LikeButton";
+import FollowButton from "../../FollowButton/FollowButton";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { blue } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -141,13 +141,17 @@ const Feed = ({ data, index }) => {
         token: user.token,
       };
       const result = await PostAPI.DeletePost(data);
-      if (result.message === "OK") {
-        setDeletedPost(true);
-        setErrorText("");
+
+      if (result) {
+        if (result.data.message.toLowerCase() === "deleted") {
+          setDeletedPost(true);
+          setErrorText("");
+        }
       } else {
         setErrorText(result.response.data.message);
         setOpenAlert(true);
       }
+
       setAnchorEl(null);
     } catch (error) {
       setErrorText(`Error : ${error}`);
@@ -155,31 +159,6 @@ const Feed = ({ data, index }) => {
     }
   };
 
-  const handleFollow = (data) => {
-    try {
-      data = { userID: user.userID, postID: data._id, token: user.token };
-      const result = PostAPI.LikePost(data);
-
-      if (result) {
-      }
-    } catch (error) {
-      setErrorText(`Error : ${error}`);
-      setOpenAlert(true);
-    }
-  };
-
-  const handleLikePost = (data) => {
-    try {
-      data = { userID: user.userID, postID: data._id, token: user.token };
-      const result = PostAPI.LikePost(data);
-
-      if (result) {
-      }
-    } catch (error) {
-      setErrorText(`Error : ${error}`);
-      setOpenAlert(true);
-    }
-  };
 
   function handleAlertClose() {
     setOpenAlert(false);
@@ -241,7 +220,7 @@ const Feed = ({ data, index }) => {
                 }}
               >
                 {followAble ? (
-                  <MenuItem onClick={() => handleFollow(data)}>Follow</MenuItem>
+                  <FollowButton data={data} />
                 ) : (
                   ""
                 )}
@@ -301,11 +280,7 @@ const Feed = ({ data, index }) => {
               )}
             </CardContent>
             {likeAble === true ? (
-              <CardActions disableSpacing>
-                <IconButton aria-label="like" onClick={() => handleLikePost()}>
-                  <FavoriteIcon />
-                </IconButton>
-              </CardActions>
+              <LikeButton data={data} />
             ) : (
               ""
             )}
