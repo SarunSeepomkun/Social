@@ -11,6 +11,11 @@ html {
   margin: 0;
 }
 
+a {
+  list-style: none;
+  text-decoration: none;
+}
+
 ul {
   list-style-type: none;
 }

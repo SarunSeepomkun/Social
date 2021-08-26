@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext, createRef } from "react";
-import { format, parseISO } from "date-fns";
 import {
   GetProfile,
   EditProfile,
@@ -15,6 +14,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import MuiAlert from "@material-ui/lab/Alert";
+import Moment from 'react-moment';
 
 const Profile = () => {
   const userID_Param = useParams().userid;
@@ -129,7 +129,7 @@ const Profile = () => {
         setlblFollower(lblFollower + 1);
       } else if (result.data.message.toLowerCase() === "unfollowed") {
         setBtnFollowText("Follow");
-        
+
         setlblFollower(lblFollower - 1);
       }
     } catch (error) {
@@ -202,7 +202,11 @@ const Profile = () => {
                       <LoadingButton />
                     ) : (
                       <button
-                        className={btnFollowText === "Followed" ? "btn btn-sm btn-primary" : "btn btn-sm btn-outline-primary"}
+                        className={
+                          btnFollowText === "Followed"
+                            ? "btn btn-sm btn-primary"
+                            : "btn btn-sm btn-outline-primary"
+                        }
                         onClick={() => FollowHandle()}
                       >
                         {btnFollowText}
@@ -222,9 +226,15 @@ const Profile = () => {
                 <div className="form-group">
                   <label className="form-label mx-1">Joined</label>
                   <label className="form-label mx-1">
-                    {lblCreatedDate === ""
-                      ? ""
-                      : format(parseISO(lblCreatedDate), "dd MMMM yyyy")}
+                    {lblCreatedDate === "" ? (
+                      ""
+                    ) : (
+                      <>
+                        <Moment fromNow ago>
+                        {lblCreatedDate}
+                        </Moment> ago
+                      </>
+                    )}
                   </label>
                 </div>
                 <div className="form-group d-flex">

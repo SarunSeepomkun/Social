@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, createRef } from "react";
-import { format, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Context/AuthContext";
 import * as PostAPI from "../../../API/PostAPI";
@@ -18,6 +18,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import Moment from "react-moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -159,7 +160,6 @@ const Feed = ({ data, index }) => {
     }
   };
 
-
   function handleAlertClose() {
     setOpenAlert(false);
   }
@@ -202,10 +202,9 @@ const Feed = ({ data, index }) => {
                   </label>
                 </Link>
               }
-              subheader={format(
-                parseISO(data.createdDate),
-                "dd/MM/yyyy HH:mm:ss"
-              )}
+              subheader={
+              <Moment fromNow>{parseISO(data.createdDate)}</Moment>
+              }
             />
             <CardContent>
               <Menu
@@ -219,11 +218,7 @@ const Feed = ({ data, index }) => {
                   horizontal: "center",
                 }}
               >
-                {followAble ? (
-                  <FollowButton data={data} />
-                ) : (
-                  ""
-                )}
+                {followAble ? <FollowButton data={data} /> : ""}
                 {editAble ? (
                   <MenuItem onClick={() => handleEdit()}>Edit</MenuItem>
                 ) : (
@@ -279,11 +274,7 @@ const Feed = ({ data, index }) => {
                 </div>
               )}
             </CardContent>
-            {likeAble === true ? (
-              <LikeButton data={data} />
-            ) : (
-              ""
-            )}
+            {likeAble === true ? <LikeButton data={data} /> : ""}
             <div>
               <Snackbar
                 open={openAlert}
