@@ -4,6 +4,7 @@ import "bootstrap/js/dist/modal";
 import { AuthContext } from "../../Context/AuthContext";
 import * as AuthAction from "../../ActionType/AuthAction";
 import brand_logo from "../../Assets/Images/social-media-128.png";
+import "./Navbar.css";
 
 const Navbar = () => {
   const { user, dispatch } = useContext(AuthContext);
@@ -21,15 +22,15 @@ const Navbar = () => {
 
   return (
     <section>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container-fluid">
-          <img
+          {/* <img
             src={brand_logo}
             alt="brand-logo"
             style={{ height: "30px", width: "30px" }}
-          />
+          /> */}
           <label htmlFor="txtUsername" className="navbar-brand mx-1">
-            <label className="text-capitalize">{user ? " Hello! " + user.username : " Social "}</label>
+            <label className="text-capitalize">{user ? " Hello! " + user.username : ""}</label>
           </label>
           <button
             className="navbar-toggler"

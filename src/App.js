@@ -18,7 +18,7 @@ function App() {
   const HomePage = () => {
     return (
       <section className="post-body">
-        <div className="container">
+        <div className="container-fluid">
           <div className="row p-1 m-1">
             <div className="col-xs-12">
               {user === null ? "" : <Postbar className="p-1 m-1" />}

@@ -5,7 +5,6 @@ import { AuthContext } from "../../../Context/AuthContext";
 import * as PostAPI from "../../../API/PostAPI";
 import LikeButton from "../../LikeButton/LikeButton";
 import FollowButton from "../../FollowButton/FollowButton";
-import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -20,25 +19,8 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Moment from "react-moment";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%", // 16:9
-  },
-  expandOpen: {
-    transform: "rotate(180deg)",
-  },
-  avatar: {
-    backgroundColor: blue[500],
-  },
-}));
-
 const Feed = ({ data, index }) => {
   const { user } = useContext(AuthContext);
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const [functionAble, SetFunctionAble] = useState(false);
@@ -169,129 +151,128 @@ const Feed = ({ data, index }) => {
   }
 
   return (
-    <div className="container-fluid" key={index}>
+    <div className="container-fluid w-100" key={index}>
       {deletedPost === false ? (
-        <>
-          <Card className={classes.root}>
-            <CardHeader
-              avatar={
-                <Link to={`/profile/${data.user_info[0]._id}`}>
-                  <Avatar aria-label="avartar" className={classes.avatar}>
-                    {data.user_info[0].username.charAt(0).toUpperCase()}
-                  </Avatar>
-                </Link>
-              }
-              action={
-                functionAble ? (
-                  <IconButton
-                    aria-controls="action-menu"
-                    aria-haspopup="true"
-                    onClick={(e) => handleClick(e)}
-                    aria-label="settings"
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                ) : (
-                  ""
-                )
-              }
-              title={
-                <Link to={`/profile/${data.user_info[0]._id}`}>
-                  <label className="text-capitalize">
-                    {data.user_info[0].username}
-                  </label>
-                </Link>
-              }
-              subheader={
-              <Moment fromNow>{parseISO(data.createdDate)}</Moment>
-              }
-            />
-            <CardContent>
-              <Menu
-                id="action-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-              >
-                {followAble ? <FollowButton data={data} /> : ""}
-                {editAble ? (
-                  <MenuItem onClick={() => handleEdit()}>Edit</MenuItem>
-                ) : (
-                  ""
-                )}
-                {editAble ? (
-                  <MenuItem onClick={() => handleDelete(data)}>Delete</MenuItem>
-                ) : (
-                  ""
-                )}
-              </Menu>
-              {edit === false ? (
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {txtPost}
-                </Typography>
+        <Card style={{ width:"100%"}}>
+          <CardHeader
+            avatar={
+              <Link to={`/profile/${data.user_info[0]._id}`}>
+                <Avatar
+                  aria-label="avartar"
+                  style={{ backgroundColor: blue[500] }}
+                >
+                  {data.user_info[0].username.charAt(0).toUpperCase()}
+                </Avatar>
+              </Link>
+            }
+            action={
+              functionAble ? (
+                <IconButton
+                  aria-controls="action-menu"
+                  aria-haspopup="true"
+                  onClick={(e) => handleClick(e)}
+                  aria-label="settings"
+                >
+                  <MoreVertIcon />
+                </IconButton>
               ) : (
-                <div className="container-fluid">
-                  <div className="row">
-                    <div className="col-12">
-                      <textarea
-                        style={{ height: "220px" }}
-                        className="form-control"
-                        placeholder="Post something"
-                        maxLength="500"
-                        onChange={CountTextLength}
-                        ref={txtEditPostRef}
-                      >
-                        {txtPost}
-                      </textarea>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-12">
-                      <label className="form-label">{textlength}/500</label>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-12">
-                      <button
-                        className="btn btn-sm btn-outline-primary m-1"
-                        onClick={() => handleConfirmEdit(data)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-sm btn-outline-danger m-1"
-                        onClick={() => handleCancelEdit()}
-                      >
-                        Cancel
-                      </button>
-                    </div>
+                ""
+              )
+            }
+            title={
+              <Link to={`/profile/${data.user_info[0]._id}`}>
+                <label className="text-capitalize">
+                  {data.user_info[0].username}
+                </label>
+              </Link>
+            }
+            subheader={<Moment fromNow>{parseISO(data.createdDate)}</Moment>}
+          />
+          <CardContent>
+            <Menu
+              id="action-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "center",
+              }}
+            >
+              {followAble ? <FollowButton data={data} /> : ""}
+              {editAble ? (
+                <MenuItem onClick={() => handleEdit()}>Edit</MenuItem>
+              ) : (
+                ""
+              )}
+              {editAble ? (
+                <MenuItem onClick={() => handleDelete(data)}>Delete</MenuItem>
+              ) : (
+                ""
+              )}
+            </Menu>
+            {edit === false ? (
+              <Typography variant="body2" color="textSecondary" component="p">
+                {txtPost}
+              </Typography>
+            ) : (
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col-12">
+                    <textarea
+                      style={{ height: "220px" }}
+                      className="form-control"
+                      placeholder="Post something"
+                      maxLength="500"
+                      onChange={CountTextLength}
+                      ref={txtEditPostRef}
+                    >
+                      {txtPost}
+                    </textarea>
                   </div>
                 </div>
-              )}
-            </CardContent>
-            {likeAble === true ? <LikeButton data={data} /> : ""}
-            <div>
-              <Snackbar
-                open={openAlert}
-                autoHideDuration={5000}
-                onClose={handleAlertClose}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
-                }}
-              >
-                <Alert onClose={() => handleAlertClose()} severity="error">
-                  {errorText}
-                </Alert>
-              </Snackbar>
-            </div>
-          </Card>
-        </>
+                <div className="row">
+                  <div className="col-12">
+                    <label className="form-label">{textlength}/500</label>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-12">
+                    <button
+                      className="btn btn-sm btn-outline-primary m-1"
+                      onClick={() => handleConfirmEdit(data)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-danger m-1"
+                      onClick={() => handleCancelEdit()}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+          {likeAble === true ? <LikeButton data={data} /> : ""}
+          <div>
+            <Snackbar
+              open={openAlert}
+              autoHideDuration={5000}
+              onClose={handleAlertClose}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+            >
+              <Alert onClose={() => handleAlertClose()} severity="error">
+                {errorText}
+              </Alert>
+            </Snackbar>
+          </div>
+        </Card>
       ) : (
         ""
       )}

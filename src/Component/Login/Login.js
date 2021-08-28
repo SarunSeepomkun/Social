@@ -4,10 +4,15 @@ import { SignIn } from "../../API/AuthAPI";
 import { AuthContext } from "../../Context/AuthContext";
 import * as AuthAction from "../../ActionType/AuthAction";
 import { Link } from "react-router-dom";
+import "./Login.css";
+import "./js/main";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import MuiAlert from "@material-ui/lab/Alert";
+import Wave_Pic from "./img/wave.png";
+import Avatar from "./img/avatar.svg";
+import background from "./img/bg.svg";
 
 const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
   const [loading, SetLoading] = useState(false);
@@ -67,84 +72,95 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
   };
 
   return (
-    <form autoComplete="off" onSubmit={HandleSignIn}>
-      <div className="container card my-5">
-        <div className="row p-1 m-1">
-          <div className="col-sm-6">
-            <label htmlFor="txtUsername" className="form-label">
-              Username
-            </label>
+    <React.Fragment>
+      <div className="login-section">
+        <Snackbar
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          open={openSnackbar}
+          autoHideDuration={5000}
+          onClose={Snackbar_handleClose}
+          action={
+            <React.Fragment>
+              <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={Snackbar_handleClose}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }
+        >
+          <Alert onClose={Snackbar_handleClose} severity="error">
+            {snackbar_Message}
+          </Alert>
+        </Snackbar>
+
+        <form autoComplete="off" onSubmit={HandleSignIn}>
+          <img className="login-wave" src={Wave_Pic} alt="" />
+          <div className="login-container">
+            <div className="login-img">
+              <img src={background} alt="" />
+            </div>
+            <div className="login-content">
+              <div className="login-form">
+                {/* <img src={Avatar} alt="" /> */}
+                <h2 className="login-title">Hello !</h2>
+                <div className="login-input-div login-one">
+                  <div className="login-i">
+                    <i className="fas fa-user"></i>
+                  </div>
+                  <div className="login-div">
+                    {/* <h5>Username</h5> */}
+                    <input
+                      type="text"
+                      className="login-input"
+                      autoComplete="off"
+                      placeholder="Username"
+                      ref={UsernameRef}
+                    />
+                  </div>
+                </div>
+                <div className="login-input-div login-pass">
+                  <div className="login-i">
+                    <i className="fas fa-lock"></i>
+                  </div>
+                  <div className="login-div">
+                    {/* <h5>Password</h5> */}
+                    <input
+                      type="password"
+                      className="login-input"
+                      autoComplete="off"
+                      placeholder="Password"
+                      ref={PasswordRef}
+                    />
+                  </div>
+                </div>
+                {/* <a href="#">Forgot Password?</a> */}
+                {loading === true ? (
+                  <LoadingButton />
+                ) : (
+                  <button type="submit" className="login-btn">
+                    Login
+                  </button>
+                )}
+                {loading === true ? (
+                  ""
+                ) : (
+                  <Link className="btn btn-sm btn-link" to={`/signup`}>
+                    Don't have an account ?
+                  </Link>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="col-sm-6">
-            <input
-              type="text"
-              className="form-control form-control-sm"
-              ref={UsernameRef}
-              required
-            />
-          </div>
-        </div>
-        <div className="row p-1 m-1">
-          <div className="col-sm-6">
-            <label htmlFor="txtPassword" className="form-label">
-              Password
-            </label>
-          </div>
-          <div className="col-sm-6">
-            <input
-              type="password"
-              className="form-control form-control-sm"
-              required
-              ref={PasswordRef}
-            />
-          </div>
-        </div>
-        <div className="row p-1 m-1">
-          <div className="col-sm-6"></div>
-          <div className="col-sm-6">
-            {loading === true ? (
-              <LoadingButton />
-            ) : (
-              <button type="submit" className="btn btn-sm btn-outline-primary">
-                Login
-              </button>
-            )}
-            {loading === true ? (
-              ""
-            ) : (
-              <Link className="btn btn-sm btn-link" to={`/signup`}>
-                Don't have an account ?
-              </Link>
-            )}
-          </div>
-        </div>
+        </form>
       </div>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        open={openSnackbar}
-        autoHideDuration={5000}
-        onClose={Snackbar_handleClose}
-        action={
-          <React.Fragment>
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={Snackbar_handleClose}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </React.Fragment>
-        }
-      >
-        <Alert onClose={Snackbar_handleClose} severity="error">
-          {snackbar_Message}
-        </Alert>
-      </Snackbar>
-    </form>
+    </React.Fragment>
   );
 };
 

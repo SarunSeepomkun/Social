@@ -260,6 +260,7 @@ const Profile = () => {
                   id="txtUsername"
                   required
                   value={txtUsername}
+                  disabled
                   onChange={(e) => setTxtUsername(e.target.value)}
                 />
               ) : (
