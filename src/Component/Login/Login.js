@@ -11,7 +11,6 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import MuiAlert from "@material-ui/lab/Alert";
 import Wave_Pic from "./img/wave.png";
-import Avatar from "./img/avatar.svg";
 import background from "./img/bg.svg";
 
 const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
@@ -108,14 +107,12 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
             </div>
             <div className="login-content">
               <div className="login-form">
-                {/* <img src={Avatar} alt="" /> */}
                 <h2 className="login-title">Hello !</h2>
                 <div className="login-input-div login-one">
                   <div className="login-i">
                     <i className="fas fa-user"></i>
                   </div>
                   <div className="login-div">
-                    {/* <h5>Username</h5> */}
                     <input
                       type="text"
                       className="login-input"
@@ -130,7 +127,6 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
                     <i className="fas fa-lock"></i>
                   </div>
                   <div className="login-div">
-                    {/* <h5>Password</h5> */}
                     <input
                       type="password"
                       className="login-input"
@@ -140,7 +136,6 @@ const Login = ({ SetLoginOrRegister, ModalSignIn }) => {
                     />
                   </div>
                 </div>
-                {/* <a href="#">Forgot Password?</a> */}
                 {loading === true ? (
                   <LoadingButton />
                 ) : (

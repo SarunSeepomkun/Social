@@ -3,7 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 import "bootstrap/js/dist/modal";
 import { AuthContext } from "../../Context/AuthContext";
 import * as AuthAction from "../../ActionType/AuthAction";
-import brand_logo from "../../Assets/Images/social-media-128.png";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -24,11 +23,6 @@ const Navbar = () => {
     <section>
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container-fluid">
-          {/* <img
-            src={brand_logo}
-            alt="brand-logo"
-            style={{ height: "30px", width: "30px" }}
-          /> */}
           <label htmlFor="txtUsername" className="navbar-brand mx-1">
             <label className="text-capitalize">{user ? " Hello! " + user.username : ""}</label>
           </label>
