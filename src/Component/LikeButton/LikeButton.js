@@ -5,6 +5,7 @@ import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import ThumbUpAltRoundedIcon from "@material-ui/icons/ThumbUpAltRounded";
 import * as PostAPI from "../../API/PostAPI";
 import { AuthContext } from "../../Context/AuthContext";
+import { green } from '@material-ui/core/colors';
 
 const LikeButton = ({ data }) => {
   const { user } = useContext(AuthContext);
@@ -49,7 +50,7 @@ const LikeButton = ({ data }) => {
           {liked === false ? (
             <ThumbUpAltOutlinedIcon color="disabled" />
           ) : (
-            <ThumbUpAltRoundedIcon color="primary" />
+            <ThumbUpAltRoundedIcon style={{ color: green[400] }} />
           )}
         </IconButton>
       </CardActions>

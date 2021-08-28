@@ -13,7 +13,7 @@ const Navbar = () => {
     try {
       dispatch({ type: AuthAction.SIGNOUT, payload: user });
 
-      history.push("/home");
+      history.push("/authentication");
     } catch (error) {
       console.log(`Error: Header.SignOutHandle(),${error}`);
     }
@@ -24,11 +24,12 @@ const Navbar = () => {
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container-fluid">
           <label htmlFor="txtUsername" className="navbar-brand mx-1">
-            <label className="text-capitalize">{user ? " Hello! " + user.username : ""}</label>
+            <label className="text-capitalize">
+              {user ? " Hello! " + user.username : ""}
+            </label>
           </label>
           <button
             className="navbar-toggler"
-            type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
@@ -40,22 +41,22 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="btn" to="/home">
-                  Feeds
+                <Link to="/home">
+                  <button className="btn">Feeds</button>
                 </Link>
               </li>
               <li className="nav-item">
                 {user === null ? (
                   ""
                 ) : (
-                  <Link className="btn" to={`/profile/${user.userID}`}>
-                    My Profile
+                  <Link to={`/profile/${user.userID}`}>
+                    <button className="btn">My Profile</button>
                   </Link>
                 )}
               </li>
             </ul>
             {user === null ? (
-              <Link className="btn" to={`/signin`}>
+              <Link className="btn" to={`/authentication`}>
                 Sign in
               </Link>
             ) : (

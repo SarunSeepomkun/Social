@@ -5,7 +5,6 @@ import {
   FollowUser,
   UploadAvatar,
 } from "../../API/UserAPI";
-import { useParams } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import { default as Loading } from "../Skeletons/Feeds/Feeds";
 import { Avatar } from "@material-ui/core";
@@ -14,10 +13,9 @@ import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import MuiAlert from "@material-ui/lab/Alert";
-import Moment from 'react-moment';
+import Moment from "react-moment";
 
-const Profile = () => {
-  const userID_Param = useParams().userid;
+const Profile = ({ userID_Param }) => {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
@@ -204,8 +202,8 @@ const Profile = () => {
                       <button
                         className={
                           btnFollowText === "Followed"
-                            ? "btn btn-sm btn-primary"
-                            : "btn btn-sm btn-outline-primary"
+                            ? "btn btn-sm btn-success"
+                            : "btn btn-sm btn-outline-success"
                         }
                         onClick={() => FollowHandle()}
                       >
@@ -231,8 +229,9 @@ const Profile = () => {
                     ) : (
                       <>
                         <Moment fromNow ago>
-                        {lblCreatedDate}
-                        </Moment> ago
+                          {lblCreatedDate}
+                        </Moment>{" "}
+                        ago
                       </>
                     )}
                   </label>
@@ -269,7 +268,7 @@ const Profile = () => {
             </div>
           </div>
 
-          {selfProfile === true ? (
+          {/* {selfProfile === true ? (
             <div className="row p-1 m-1">
               <div className="col-sm-2">
                 <label htmlFor="txtPassword" className="form-label">
@@ -287,7 +286,7 @@ const Profile = () => {
             </div>
           ) : (
             ""
-          )}
+          )} */}
 
           <div className="row p-1 m-1">
             <div className="col-sm-2">
@@ -390,7 +389,7 @@ const Profile = () => {
                     ) : (
                       <button
                         type="submit"
-                        className="btn btn-outline-primary"
+                        className="btn btn-outline-success"
                         onClick={() => SaveProfile()}
                       >
                         Save

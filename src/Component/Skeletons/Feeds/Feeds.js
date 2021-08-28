@@ -23,7 +23,6 @@ function Media(props) {
   const classes = useStyles();
 
   return (
-    <div className="container-fluid">
       <Card className={classes.card}>
         <CardHeader
           avatar={
@@ -69,7 +68,6 @@ function Media(props) {
           </React.Fragment>
         </CardContent>
       </Card>
-    </div>
   );
 }
 

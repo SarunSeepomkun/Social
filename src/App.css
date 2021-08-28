@@ -38,6 +38,6 @@ textarea {
   overflow: hidden;
 }
 
-.main-background {
-  background-color: rgba(235,251,246,0.2);
+input[type="button"] , button {
+  outline: none !important;
 }

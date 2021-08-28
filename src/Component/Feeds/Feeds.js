@@ -15,15 +15,15 @@ const Feeds = () => {
   }, []);
 
   return (
-    <div className="container-fluid w-100 d-flex flex-column justify-content-center">
+    <div className="d-flex flex-column justify-content-center">
       {posts !== undefined ? (
         posts.map((data, index) => (
-          <div className="container-fluid w-100 mt-3" key={index}>
+          <div className="mt-3" key={index}>
             <Feed data={data} key={index} />
           </div>
         ))
       ) : (
-        <div className="container-fluid">
+        <div>
           <div className="mt-3">
             <Loading />
           </div>

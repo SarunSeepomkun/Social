@@ -18,6 +18,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Moment from "react-moment";
+import FadeIn from "react-fade-in";
 
 const Feed = ({ data, index }) => {
   const { user } = useContext(AuthContext);
@@ -151,131 +152,133 @@ const Feed = ({ data, index }) => {
   }
 
   return (
-    <div className="container-fluid w-100" key={index}>
-      {deletedPost === false ? (
-        <Card style={{ width:"100%"}}>
-          <CardHeader
-            avatar={
-              <Link to={`/profile/${data.user_info[0]._id}`}>
-                <Avatar
-                  aria-label="avartar"
-                  style={{ backgroundColor: blue[500] }}
-                >
-                  {data.user_info[0].username.charAt(0).toUpperCase()}
-                </Avatar>
-              </Link>
-            }
-            action={
-              functionAble ? (
-                <IconButton
-                  aria-controls="action-menu"
-                  aria-haspopup="true"
-                  onClick={(e) => handleClick(e)}
-                  aria-label="settings"
-                >
-                  <MoreVertIcon />
-                </IconButton>
+    <div key={index}>
+      <FadeIn>
+        {deletedPost === false ? (
+          <Card style={{ width: "100%" }}>
+            <CardHeader
+              avatar={
+                <Link to={`/profile/${data.user_info[0]._id}`}>
+                  <Avatar
+                    aria-label="avartar"
+                    style={{ backgroundColor: blue[500] }}
+                  >
+                    {data.user_info[0].username.charAt(0).toUpperCase()}
+                  </Avatar>
+                </Link>
+              }
+              action={
+                functionAble ? (
+                  <IconButton
+                    aria-controls="action-menu"
+                    aria-haspopup="true"
+                    onClick={(e) => handleClick(e)}
+                    aria-label="settings"
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                ) : (
+                  ""
+                )
+              }
+              title={
+                <Link to={`/profile/${data.user_info[0]._id}`}>
+                  <label className="text-capitalize">
+                    {data.user_info[0].username}
+                  </label>
+                </Link>
+              }
+              subheader={<Moment fromNow>{parseISO(data.createdDate)}</Moment>}
+            />
+            <CardContent>
+              <Menu
+                id="action-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+              >
+                {followAble ? <FollowButton data={data} /> : ""}
+                {editAble ? (
+                  <MenuItem onClick={() => handleEdit()}>Edit</MenuItem>
+                ) : (
+                  ""
+                )}
+                {editAble ? (
+                  <MenuItem onClick={() => handleDelete(data)}>Delete</MenuItem>
+                ) : (
+                  ""
+                )}
+              </Menu>
+              {edit === false ? (
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {txtPost}
+                </Typography>
               ) : (
-                ""
-              )
-            }
-            title={
-              <Link to={`/profile/${data.user_info[0]._id}`}>
-                <label className="text-capitalize">
-                  {data.user_info[0].username}
-                </label>
-              </Link>
-            }
-            subheader={<Moment fromNow>{parseISO(data.createdDate)}</Moment>}
-          />
-          <CardContent>
-            <Menu
-              id="action-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-              }}
-            >
-              {followAble ? <FollowButton data={data} /> : ""}
-              {editAble ? (
-                <MenuItem onClick={() => handleEdit()}>Edit</MenuItem>
-              ) : (
-                ""
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="col-12">
+                      <textarea
+                        style={{ height: "220px" }}
+                        className="form-control"
+                        placeholder="Post something"
+                        maxLength="500"
+                        onChange={CountTextLength}
+                        ref={txtEditPostRef}
+                      >
+                        {txtPost}
+                      </textarea>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-12">
+                      <label className="form-label">{textlength}/500</label>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-12">
+                      <button
+                        className="btn btn-sm btn-outline-success m-1"
+                        onClick={() => handleConfirmEdit(data)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-sm btn-outline-danger m-1"
+                        onClick={() => handleCancelEdit()}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
               )}
-              {editAble ? (
-                <MenuItem onClick={() => handleDelete(data)}>Delete</MenuItem>
-              ) : (
-                ""
-              )}
-            </Menu>
-            {edit === false ? (
-              <Typography variant="body2" color="textSecondary" component="p">
-                {txtPost}
-              </Typography>
-            ) : (
-              <div className="container-fluid">
-                <div className="row">
-                  <div className="col-12">
-                    <textarea
-                      style={{ height: "220px" }}
-                      className="form-control"
-                      placeholder="Post something"
-                      maxLength="500"
-                      onChange={CountTextLength}
-                      ref={txtEditPostRef}
-                    >
-                      {txtPost}
-                    </textarea>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-12">
-                    <label className="form-label">{textlength}/500</label>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-12">
-                    <button
-                      className="btn btn-sm btn-outline-primary m-1"
-                      onClick={() => handleConfirmEdit(data)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="btn btn-sm btn-outline-danger m-1"
-                      onClick={() => handleCancelEdit()}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </CardContent>
-          {likeAble === true ? <LikeButton data={data} /> : ""}
-          <div>
-            <Snackbar
-              open={openAlert}
-              autoHideDuration={5000}
-              onClose={handleAlertClose}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "center",
-              }}
-            >
-              <Alert onClose={() => handleAlertClose()} severity="error">
-                {errorText}
-              </Alert>
-            </Snackbar>
-          </div>
-        </Card>
-      ) : (
-        ""
-      )}
+            </CardContent>
+            {likeAble === true ? <LikeButton data={data} /> : ""}
+            <div>
+              <Snackbar
+                open={openAlert}
+                autoHideDuration={5000}
+                onClose={handleAlertClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+              >
+                <Alert onClose={() => handleAlertClose()} severity="error">
+                  {errorText}
+                </Alert>
+              </Snackbar>
+            </div>
+          </Card>
+        ) : (
+          ""
+        )}
+      </FadeIn>
     </div>
   );
 };

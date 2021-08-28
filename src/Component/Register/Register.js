@@ -2,8 +2,9 @@ import React, { useState, createRef } from "react";
 import { useHistory } from "react-router-dom";
 import { SignUp } from "../../API/AuthAPI";
 import { Link } from "react-router-dom";
+import FadeIn from 'react-fade-in';
 
-const Register = () => {
+const Register = ({ setSignIn_SignUp }) => {
   const [loading, SetLoading] = useState(false);
   let history = useHistory();
   const UsernameRef = createRef();
@@ -17,7 +18,7 @@ const Register = () => {
       SetLoading(true);
       if (PasswordRef.current.value === ConfirmPasswordRef.current.value) {
         const { data } = await SignUp({
-          username: UsernameRef.current.value,
+          username: UsernameRef.current.value.toLowerCase(),
           password: PasswordRef.current.value,
           email: EmailRef.current.value,
           bio: BioRef.current.value,
@@ -48,101 +49,94 @@ const Register = () => {
   };
 
   return (
-    <div className="container-fuild align-items-center justify-content-center">
-      <form autoComplete="off">
-        <div className="container card p-1 m-1">
-          <div className="row p-1 m-1">
-            <label htmlFor="txtUsername" className="col-sm-6 col-form-label">
-              Username
-            </label>
-            <div className="col-sm-6">
-              <input
-                type="text"
-                className="form-control form-control-sm"
-                ref={UsernameRef}
-                required
-              />
-            </div>
-          </div>
-          <div className="row p-1 m-1">
-            <label htmlFor="txtEmail" className="col-sm-6 col-form-label">
-              E-mail
-            </label>
-            <div className="col-sm-6">
-              <input
-                type="email"
-                className="form-control form-control-sm"
-                required
-                ref={EmailRef}
-              />
-            </div>
-          </div>
-          <div className="row p-1 m-1">
-            <label htmlFor="txtPassword" className="col-sm-6 col-form-label">
-              Password
-            </label>
-            <div className="col-sm-6">
-              <input
-                type="password"
-                className="form-control form-control-sm"
-                ref={PasswordRef}
-                required
-              />
-            </div>
-          </div>
-          <div className="row p-1 m-1">
-            <label
-              htmlFor="txtConfirmPassword"
-              className="col-sm-6 col-form-label"
-            >
-              Confirm-Password
-            </label>
-            <div className="col-sm-6">
-              <input
-                type="password"
-                className="form-control form-control-sm"
-                ref={ConfirmPasswordRef}
-                required
-              />
-            </div>
-          </div>
-          <div className="row p-1 m-1">
-            <label htmlFor="txtBio" className="col-sm-6 col-form-label">
-              Bio
-            </label>
-            <div className="col-sm-6">
-              <input
-                type="text"
-                className="form-control form-control-sm"
-                ref={BioRef}
-                required
-              />
-            </div>
-          </div>
-          <div className="row p-1 m-1">
-            <div className="col-sm-6"></div>
-            <div className="col-sm-6">
-              {loading === true ? (
-                <LoadingButton />
-              ) : (
-                <button
-                  type="button"
-                  className="btn btn-sm btn-outline-primary"
-                  onClick={() => {
-                    HandleRegister();
-                  }}
-                >
-                  Register
-                </button>
-              )}
-              <Link className="btn btn-sm btn-link" to={`/signin`}>
-                Already have an account ?
-              </Link>
-            </div>
-          </div>
+    <form autoComplete="off">
+      <FadeIn>
+      <h2 className="login-title">SIGN-UP</h2>
+      <div className="login-input-div login-one">
+        <div className="login-i">
+          <i className="fas fa-user"></i>
         </div>
-      </form>
-    </div>
+        <div className="login-div">
+          <input
+            type="text"
+            className="login-input"
+            autoComplete="off"
+            placeholder="Username"
+            ref={UsernameRef}
+            required
+          />
+        </div>
+      </div>
+
+      <div className="login-input-div login-one">
+        <div className="login-i">
+          <i className="fas fa-envelope"></i>
+        </div>
+        <div className="login-div">
+          <input
+            type="email"
+            className="login-input"
+            autoComplete="off"
+            placeholder="Email"
+            ref={EmailRef}
+            required
+          />
+        </div>
+      </div>
+
+      <div className="login-input-div login-pass">
+        <div className="login-i">
+          <i className="fas fa-key"></i>
+        </div>
+        <div className="login-div">
+          <input
+            type="password"
+            className="login-input"
+            autoComplete="off"
+            placeholder="Password"
+            ref={PasswordRef}
+          />
+        </div>
+      </div>
+      <div className="login-input-div login-pass">
+        <div className="login-i">
+          <i className="fas fa-lock"></i>
+        </div>
+        <div className="login-div">
+          <input
+            type="password"
+            className="login-input"
+            autoComplete="off"
+            placeholder="Confirm-Password"
+            ref={ConfirmPasswordRef}
+          />
+        </div>
+      </div>
+
+      {loading === true ? (
+        <LoadingButton />
+      ) : (
+        <button
+          type="button"
+          className="login-btn"
+          onClick={() => {
+            HandleRegister();
+          }}
+        >
+          Register
+        </button>
+      )}
+
+      <Link
+        className="btn btn-sm btn-link"
+        onClick={() => {
+          setSignIn_SignUp("signin");
+        }}
+      >
+        Already have an account ?
+      </Link>
+      </FadeIn>
+    </form>
   );
 };
 
