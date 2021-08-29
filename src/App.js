@@ -4,7 +4,6 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./Component/Navbar/Navbar";
-import Register from "./Component/Register/Register";
 import NotFound from "./Component/NotFound/NotFound";
 import Authentication from "./Pages/Authentication/Authentication";
 import HomePage from "./Pages/HomePage/HomePage";
@@ -24,9 +23,6 @@ function App() {
           </Route>
           <Route path="/authentication">
               <Authentication />
-          </Route>
-          <Route path="/signup">
-              <Register />
           </Route>
           <Route path="/profile/:userid">
               <ProfilePage />

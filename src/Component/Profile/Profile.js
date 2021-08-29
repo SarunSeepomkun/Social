@@ -389,7 +389,7 @@ const Profile = ({ userID_Param }) => {
                     ) : (
                       <button
                         type="submit"
-                        className="btn btn-outline-success"
+                        className="btn btn-sm btn-outline-success"
                         onClick={() => SaveProfile()}
                       >
                         Save

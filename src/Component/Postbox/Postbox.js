@@ -8,8 +8,11 @@ import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";
 import { blue } from "@material-ui/core/colors";
 import FadeIn from "react-fade-in";
+import { FeedsContext } from "../../Context/FeedsContext";
 
 const Postbox = () => {
+  const { FeedsState } = useContext(FeedsContext);
+  const [FetchFeed, setFetchFeed] = FeedsState;
   const { user } = useContext(AuthContext);
   const messageRef = createRef();
   const [loading, setLoading] = useState(false);
@@ -28,6 +31,7 @@ const Postbox = () => {
         });
         if (result.statusText === "Created") {
           setTxtMessage("");
+          setFetchFeed(FetchFeed + 1);
         }
       }
     } catch (error) {
@@ -43,7 +47,7 @@ const Postbox = () => {
 
   const LoadingButton = () => {
     return (
-      <button className="btn btn-outline-success" type="button" disabled>
+      <button className="btn btn-sm btn-outline-success" type="button" disabled>
         <span
           className="spinner-border spinner-border-sm"
           role="status"
@@ -60,7 +64,7 @@ const Postbox = () => {
         <Card style={{ width: "100%" }}>
           <CardHeader
             avatar={
-              <Link to={`/profile/${user._id}`}>
+              <Link to={`/profile/${user.userID}`}>
                 <Avatar
                   aria-label="avartar"
                   style={{ backgroundColor: blue[500] }}
@@ -70,7 +74,7 @@ const Postbox = () => {
               </Link>
             }
             title={
-              <Link to={`/profile/${user._id}`}>
+              <Link to={`/profile/${user.userID}`}>
                 <label className="text-capitalize">{user.username}</label>
               </Link>
             }
@@ -87,8 +91,7 @@ const Postbox = () => {
                     onChange={(e) => setTxtMessage(e.target.value)}
                     ref={messageRef}
                     value={txtMessage}
-                  >
-                  </textarea>
+                  ></textarea>
                 </div>
               </div>
               <div className="row">
@@ -102,7 +105,7 @@ const Postbox = () => {
                 <div className="col-12 d-flex justify-content-end">
                   {loading === false ? (
                     <button
-                      className="btn btn-outline-success my-1"
+                      className="btn btn-sm btn-outline-success my-1"
                       type="submit"
                       id="btn-post"
                     >
