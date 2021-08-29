@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -8,22 +7,11 @@ import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Skeleton from "@material-ui/lab/Skeleton";
 
-const useStyles = makeStyles((theme) => ({
-  card: {
-    width: "100%",
-
-  },
-  media: {
-    height: "100%",
-  },
-}));
-
 function Media(props) {
   const { loading = false } = props;
-  const classes = useStyles();
 
   return (
-      <Card className={classes.card}>
+      <Card>
         <CardHeader
           avatar={
             <Skeleton
@@ -56,7 +44,7 @@ function Media(props) {
             )
           }
         />
-        <Skeleton animation="wave" variant="rect" className={classes.media} />
+        <Skeleton animation="wave" variant="rect" />
         <CardContent>
           <React.Fragment>
             <Skeleton

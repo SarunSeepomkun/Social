@@ -84,10 +84,10 @@ const Postbox = () => {
                     className="form-control"
                     placeholder="Post something"
                     maxLength="500"
-                    ref={messageRef}
                     onChange={(e) => setTxtMessage(e.target.value)}
+                    ref={messageRef}
+                    value={txtMessage}
                   >
-                    {txtMessage}
                   </textarea>
                 </div>
               </div>

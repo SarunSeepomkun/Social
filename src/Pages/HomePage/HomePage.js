@@ -9,20 +9,16 @@ const HomePage = () => {
 
   return (
     <section className="post-body">
-      <div className="container-fluid">
-        <div className="row p-1 m-1">
-          <div className="col-xs-12">
-            {user === null ? (
-              ""
-            ) : (
-              <div className="container-fluid postbox">
-                <Postbox />
-              </div>
-            )}
-            <div className="container-fluid feeds">
-              <Feeds />
-            </div>
+      <div className="d-flex flex-column align-items-center">
+        {user === null ? (
+          ""
+        ) : (
+          <div className="postbox">
+            <Postbox />
           </div>
+        )}
+        <div className="feeds">
+          <Feeds />
         </div>
       </div>
     </section>

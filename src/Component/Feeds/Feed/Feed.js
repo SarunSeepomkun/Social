@@ -155,7 +155,7 @@ const Feed = ({ data, index }) => {
     <div key={index}>
       <FadeIn>
         {deletedPost === false ? (
-          <Card style={{ width: "100%" }}>
+          <Card>
             <CardHeader
               avatar={
                 <Link to={`/profile/${data.user_info[0]._id}`}>
