@@ -1,59 +1,50 @@
-import React, { useState, useEffect , useContext } from "react";
-import { GetPosts, GetPostByUserID } from "../../API/PostAPI";
+import React, { useState, useContext, useRef, useCallback } from "react";
 import Feed from "./Feed/Feed";
 import { default as Loading } from "../Skeletons/Feeds/Feeds";
 import { FeedsContext } from "../../Context/FeedsContext";
+import usePostPaging from "./usePostSearch";
+import { FormatColorResetRounded } from "@material-ui/icons";
 // import JsonFind from "json-find";
 
 const Feeds = ({ userID_Param }) => {
-  const [posts, setPosts] = useState();
-  const { FeedsState } = useContext(FeedsContext);
-  const [FetchFeed] = FeedsState;
+  const [pageNumber, setPageNumber] = useState(1);
+  const { loading, error, posts, hasMore } = usePostPaging(pageNumber);
 
-  useEffect(() => {
-    async function fetchPost() {
-      if (userID_Param) {
-        setPosts();
-        const userID = userID_Param;
-        const { data } = await GetPostByUserID(userID);
-        if (data) {
-          //const doc = JsonFind(data);
-          //const result = doc.findValues("userID", userID);
-          setPosts(data);
+  const observer = useRef();
+  const lastPostElementRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPageNumber((prevPageNumber) => prevPageNumber + 1);
         }
-      } else {
-        setPosts();
-        const { data } = await GetPosts();
-        if (data) {
-          setPosts(data);
-        }
-      }
-    }
-    fetchPost();
-
-  }, [FetchFeed,userID_Param]);
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
 
   return (
     <div className="d-flex flex-column justify-content-center">
-      {posts !== undefined ? (
-        posts.map((data, index) => (
-          <div className="mt-3" key={index}>
-            <Feed data={data} key={index} />
-          </div>
-        ))
-      ) : (
-        <div>
-          <div className="mt-3">
-            <Loading />
-          </div>
-          <div className="mt-3">
-            <Loading />
-          </div>
-          <div className="mt-3">
-            <Loading />
-          </div>
-        </div>
-      )}
+      {posts.length > 1 ? posts.map((data, index) => {
+        if (posts.length === index + 1) {
+          return (
+            <div className="mt-3" ref={lastPostElementRef} key={index}>
+              <Feed data={data} key={index} />
+            </div>
+          );
+        } else {
+          return (
+            <div className="mt-3" key={index}>
+              <Feed data={data} key={index} />
+            </div>
+          );
+        }
+      }):""}
+
+      <div className="mt-3">{loading ? <Loading /> : ""}</div>
+      <div>{error}</div>
     </div>
   );
 };

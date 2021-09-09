@@ -34,10 +34,6 @@ pre {
   padding: 10px;
 }
 
-textarea {
-  overflow: hidden;
-}
-
 input[type="button"] , button {
   outline: none !important;
 }

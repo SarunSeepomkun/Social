@@ -7,7 +7,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import MuiAlert from "@material-ui/lab/Alert";
-import FadeIn from 'react-fade-in';
+import FadeIn from "react-fade-in";
 
 const Login = ({ setSignIn_SignUp }) => {
   const [loading, SetLoading] = useState(false);
@@ -97,51 +97,51 @@ const Login = ({ setSignIn_SignUp }) => {
         </Alert>
       </Snackbar>
       <form autoComplete="off" onSubmit={HandleSignIn}>
-      <FadeIn>
-        <h2 className="login-title">SIGN-IN</h2>
-        <div className="login-input-div login-one">
-          <div className="login-i">
-            <i className="fas fa-user"></i>
+        <FadeIn>
+          <h2 className="login-title">SIGN-IN</h2>
+          <div className="login-input-div login-one">
+            <div className="login-i">
+              <i className="fas fa-user"></i>
+            </div>
+            <div className="login-div">
+              <input
+                type="text"
+                className="login-input"
+                autoComplete="off"
+                placeholder="Username"
+                ref={UsernameRef}
+              />
+            </div>
           </div>
-          <div className="login-div">
-            <input
-              type="text"
-              className="login-input"
-              autoComplete="off"
-              placeholder="Username"
-              ref={UsernameRef}
-            />
+          <div className="login-input-div login-pass">
+            <div className="login-i">
+              <i className="fas fa-key"></i>
+            </div>
+            <div className="login-div">
+              <input
+                type="password"
+                className="login-input"
+                autoComplete="off"
+                placeholder="Password"
+                ref={PasswordRef}
+              />
+            </div>
           </div>
-        </div>
-        <div className="login-input-div login-pass">
-          <div className="login-i">
-            <i className="fas fa-key"></i>
-          </div>
-          <div className="login-div">
-            <input
-              type="password"
-              className="login-input"
-              autoComplete="off"
-              placeholder="Password"
-              ref={PasswordRef}
-            />
-          </div>
-        </div>
-        {loading === true ? (
-          <LoadingButton />
-        ) : (
-          <button type="submit" className="login-btn">
-            Login
-          </button>
-        )}
-        <Link
-          className="btn btn-sm btn-link"
-          onClick={() => {
-            setSignIn_SignUp("signup");
-          }}
-        >
-          Don't have an account ?
-        </Link>
+          {loading === true ? (
+            <LoadingButton />
+          ) : (
+            <button type="submit" className="login-btn">
+              Login
+            </button>
+          )}
+          <Link
+            className="btn btn-sm btn-link"
+            onClick={() => {
+              setSignIn_SignUp("signup");
+            }}
+          >
+            Don't have an account ?
+          </Link>
         </FadeIn>
       </form>
     </React.Fragment>

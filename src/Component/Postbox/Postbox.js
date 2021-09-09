@@ -9,6 +9,7 @@ import Avatar from "@material-ui/core/Avatar";
 import { blue } from "@material-ui/core/colors";
 import FadeIn from "react-fade-in";
 import { FeedsContext } from "../../Context/FeedsContext";
+import "./Postbox.css";
 
 const Postbox = () => {
   const { FeedsState } = useContext(FeedsContext);
@@ -84,13 +85,14 @@ const Postbox = () => {
               <div className="row">
                 <div className="col-12">
                   <textarea
-                    style={{ height: "40px" }}
-                    className="form-control"
+                    className="form-control textarea" 
                     placeholder="Post something"
+                    contenteditable
                     maxLength="500"
                     onChange={(e) => setTxtMessage(e.target.value)}
                     ref={messageRef}
                     value={txtMessage}
+                    row="1"
                   ></textarea>
                 </div>
               </div>
