@@ -1,9 +1,8 @@
-import React, { useState, useContext, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Feed from "./Feed/Feed";
 import { default as Loading } from "../Skeletons/Feeds/Feeds";
-import { FeedsContext } from "../../Context/FeedsContext";
 import usePostPaging from "./usePostSearch";
-import { FormatColorResetRounded } from "@material-ui/icons";
+// import { FormatColorResetRounded } from "@material-ui/icons";
 // import JsonFind from "json-find";
 
 const Feeds = ({ userID_Param }) => {
