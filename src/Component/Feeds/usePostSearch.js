@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetPostsWithPaging } from "../../API/PostAPI";
 
-const usePostPaging = (pageNumber) => {
+const usePostPaging = (pageNumber, pageLimit) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -12,18 +12,17 @@ const usePostPaging = (pageNumber) => {
       setLoading(true);
       setError(false);
 
-      const data = await GetPostsWithPaging(pageNumber , 5);
+      const data = await GetPostsWithPaging(pageNumber, pageLimit);
       if (data) {
-        if(data.data.length > 0)
-        {
-          setPosts(data.data);
-        }
+        setPosts((prevPosts) => {
+          return [...new Set([...prevPosts, ...data.data])];
+        });
         setHasMore(data.data.length > 0);
         setLoading(false);
       }
     };
     GetPosts();
-  }, [pageNumber]);
+  }, [pageNumber, pageLimit]);
 
   return { loading, error, posts, hasMore };
 };
