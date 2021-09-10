@@ -15,10 +15,27 @@ const GetPostsWithPaging = async (pageNumber, pageLimit) => {
   try {
     pageNumber = pageNumber || 0;
     pageLimit = pageLimit || 10;
-    const result = await axios.get(`${API_URI}/post/GetPostsWithPaging/${pageNumber}/${pageLimit}`);
+    const result = await axios.get(
+      `${API_URI}/post/GetPostsWithPaging/${pageNumber}/${pageLimit}`
+    );
     return result;
   } catch (error) {
     console.log(`PostAPI.GetPostsWithPaging,${error}`);
+  }
+};
+
+const GetPostByPostID = async (PostID, token) => {
+  try {
+    const result = await axios.post(
+      `${API_URI}/post/GetPostByPostID`,
+      { postID : PostID },
+      {
+        headers: { jwttoken: token },
+      }
+    );
+    return result;
+  } catch (error) {
+    console.log(`PostAPI.GetPostByPostID,${error}`);
   }
 };
 
@@ -100,5 +117,6 @@ export {
   EditPost,
   DeletePost,
   GetPostByUserID,
-  GetPostsWithPaging
+  GetPostsWithPaging,
+  GetPostByPostID
 };

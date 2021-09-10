@@ -1,6 +1,6 @@
 import React, { createRef, useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../Context/AuthContext";
-import { CreatePost } from "../../API/PostAPI";
+import { CreatePost, GetPostByPostID } from "../../API/PostAPI";
 import { Link } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -13,7 +13,9 @@ import "./Postbox.css";
 
 const Postbox = () => {
   const { FeedsState } = useContext(FeedsContext);
+  // eslint-disable-next-line no-unused-vars
   const [FetchFeed, setFetchFeed] = FeedsState;
+
   const { user } = useContext(AuthContext);
   const messageRef = createRef();
   const [loading, setLoading] = useState(false);
@@ -31,8 +33,12 @@ const Postbox = () => {
           token: user.token,
         });
         if (result.statusText === "Created") {
+          const return_postID = result.data.return_postID;
           setTxtMessage("");
-          setFetchFeed(FetchFeed + 1);
+          const data = await GetPostByPostID(return_postID, user.token);
+          setFetchFeed((prevPosts) => {
+            return [...new Set([...data.data, ...prevPosts])];
+          });
         }
       }
     } catch (error) {
@@ -85,7 +91,7 @@ const Postbox = () => {
               <div className="row">
                 <div className="col-12">
                   <textarea
-                    className="form-control textarea" 
+                    className="form-control textarea"
                     placeholder="Post something"
                     contenteditable
                     maxLength="500"
