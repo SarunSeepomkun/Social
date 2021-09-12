@@ -143,6 +143,20 @@
 	margin-bottom: 4px;
 }
 
+.password-strong{
+	z-index: -1;
+	margin-top: 52px;
+	width: 100%;
+}
+
+.password-match{
+	z-index: -1;
+	margin-top: 52px;
+	width: 100%;
+	color: red;
+	font-size: 10px;
+}
+
 .login-a{
 	display: block;
 	text-align: right;
