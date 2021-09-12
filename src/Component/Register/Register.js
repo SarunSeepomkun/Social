@@ -25,7 +25,7 @@ const Register = ({ setSignIn_SignUp }) => {
         const { data } = await SignUp({
           username: UsernameRef.current.value.toLowerCase(),
           password: txtPassword,
-          email: EmailRef.current.value
+          email: EmailRef.current.value,
         });
         if (data !== null && data !== "" && data !== undefined) {
           history.push("/home");
@@ -39,7 +39,7 @@ const Register = ({ setSignIn_SignUp }) => {
   };
 
   useEffect(() => {
-    if (txtPassword === txtConfirmPassword) {
+    if (txtConfirmPassword === "" || (txtPassword === txtConfirmPassword)) {
       setCheckMatchPassword("");
     } else {
       setCheckMatchPassword("Password doesn't match");
