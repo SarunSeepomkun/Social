@@ -49,14 +49,14 @@ const Register = ({ setSignIn_SignUp }) => {
   const LoadingButton = () => {
     return (
       <button type="submit" className="login-btn" disabled>
-        <div class="spinner-grow spinner-grow-sm m-1" role="status">
-          <span class="visually-hidden">Loading...</span>
+        <div className="spinner-grow spinner-grow-sm m-1" role="status">
+          <span className="visually-hidden">Loading...</span>
         </div>
-        <div class="spinner-grow spinner-grow-sm m-1" role="status">
-          <span class="visually-hidden">Loading...</span>
+        <div className="spinner-grow spinner-grow-sm m-1" role="status">
+          <span className="visually-hidden">Loading...</span>
         </div>
-        <div class="spinner-grow spinner-grow-sm m-1" role="status">
-          <span class="visually-hidden">Loading...</span>
+        <div className="spinner-grow spinner-grow-sm m-1" role="status">
+          <span className="visually-hidden">Loading...</span>
         </div>
       </button>
     );

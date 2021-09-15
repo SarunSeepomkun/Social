@@ -21,6 +21,7 @@ const Postbox = () => {
   const [loading, setLoading] = useState(false);
   const [txtMessage, setTxtMessage] = useState("");
   const [textlength, setTextlength] = useState(0);
+  const [btnPostAble,setbtnPostAble] = useState(false);
 
   const NewPost_Click = async (e) => {
     setLoading(true);
@@ -50,6 +51,7 @@ const Postbox = () => {
 
   useEffect(() => {
     setTextlength(txtMessage.length);
+    setbtnPostAble(txtMessage.length < 1);
   }, [txtMessage]);
 
   const LoadingButton = () => {
@@ -92,7 +94,7 @@ const Postbox = () => {
                 <div className="col-12">
                   <textarea
                     className="form-control textarea"
-                    placeholder="Post something"
+                    placeholder="What are you thinking ?"
                     contenteditable
                     maxLength="500"
                     onChange={(e) => setTxtMessage(e.target.value)}
@@ -104,7 +106,7 @@ const Postbox = () => {
               </div>
               <div className="row">
                 <div className="col-12">
-                  <label className="form-label my-1 text-muted fs-6">
+                  <label className="form-label my-1 label-maxlength">
                     {textlength}/500
                   </label>
                 </div>
@@ -116,6 +118,7 @@ const Postbox = () => {
                       className="btn btn-sm btn-outline-success my-1"
                       type="submit"
                       id="btn-post"
+                      disabled={btnPostAble}
                     >
                       Post
                     </button>

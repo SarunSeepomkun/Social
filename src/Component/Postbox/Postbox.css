@@ -1,0 +1,12 @@
+.btn , .btn-outline-success{
+    border-color: var(--green);
+}
+
+.form-control .textarea{
+    outline-color: var(--green);
+}
+
+.label-maxlength{
+    font-size: 12px;
+    color: gray;
+}

@@ -44,14 +44,14 @@ const Profile = ({ userID_Param }) => {
   const [snackbar_Message, setSnackbar_Message] = useState("");
 
   function SetProfile(data) {
-    setTxtUsername(data.username);
-    setTxtEmail(data.email);
-    setLblCountry(data.country);
-    setLblCreatedDate(data.createdDate);
-    setTxtBio(data.bio);
-    setlblFollower(data.followers.length);
-    setlblFollowing(data.followings.length);
-    setGender(data.gender);
+    setTxtUsername(data?.username);
+    setTxtEmail(data?.email);
+    setLblCountry(data?.country);
+    setLblCreatedDate(data?.createdDate);
+    setTxtBio(data?.bio);
+    setlblFollower(data?.followers.length);
+    setlblFollowing(data?.followings.length);
+    setGender(data?.gender);
   }
 
   useEffect(() => {

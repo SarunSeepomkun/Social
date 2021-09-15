@@ -21,7 +21,7 @@ const Navbar = () => {
 
   return (
     <section>
-      <nav className="navbar navbar-expand-lg navbar-light">
+      <nav className="navbar navbar-expand-lg">
         <div className="container-fluid">
           <label htmlFor="txtUsername" className="navbar-brand mx-1">
             <label className="text-capitalize">

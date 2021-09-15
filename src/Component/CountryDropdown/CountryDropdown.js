@@ -10,7 +10,7 @@ const CountryDropdown = ({ country, setCountry, selfProfile }) => {
   useEffect(() => {
     if (country !== "") {
       let result = ContryList.find((el) => el.code === country);
-      setCountry_name(result.name);
+      setCountry_name(result?.name);
     }
   }, [country]);
 
